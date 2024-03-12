@@ -1,0 +1,3 @@
+[2023-03-30 15:23:08,100][inference.model_runners][INFO] - Reading checkpoint from /proj/kuhl_lab/RFdiffusion/inference/../models/Base_ckpt.pt
+[2023-03-30 15:23:12,759][inference.model_runners][INFO] - Loading checkpoint.
+[2023-03-30 15:23:15,674][diffusion][INFO] - Calculating IGSO3.
