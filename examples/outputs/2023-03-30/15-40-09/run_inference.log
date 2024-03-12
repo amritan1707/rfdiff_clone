@@ -1,0 +1,23 @@
+[2023-03-30 15:40:09,812][inference.model_runners][INFO] - Reading checkpoint from /proj/kuhl_lab/RFdiffusion/inference/../models/Base_ckpt.pt
+[2023-03-30 15:40:14,865][inference.model_runners][INFO] - Loading checkpoint.
+[2023-03-30 15:40:17,483][diffusion][INFO] - Using cached IGSO3.
+[2023-03-30 15:40:17,561][__main__][INFO] - Making design example_outputs/design_unconditional_0
+[2023-03-30 15:40:17,563][__main__][INFO] - (cautious mode) Skipping this design because example_outputs/design_unconditional_0.pdb already exists.
+[2023-03-30 15:40:17,563][__main__][INFO] - Making design example_outputs/design_unconditional_1
+[2023-03-30 15:40:17,563][__main__][INFO] - (cautious mode) Skipping this design because example_outputs/design_unconditional_1.pdb already exists.
+[2023-03-30 15:40:17,564][__main__][INFO] - Making design example_outputs/design_unconditional_2
+[2023-03-30 15:40:17,564][__main__][INFO] - (cautious mode) Skipping this design because example_outputs/design_unconditional_2.pdb already exists.
+[2023-03-30 15:40:17,564][__main__][INFO] - Making design example_outputs/design_unconditional_3
+[2023-03-30 15:40:17,565][__main__][INFO] - (cautious mode) Skipping this design because example_outputs/design_unconditional_3.pdb already exists.
+[2023-03-30 15:40:17,565][__main__][INFO] - Making design example_outputs/design_unconditional_4
+[2023-03-30 15:40:17,565][__main__][INFO] - (cautious mode) Skipping this design because example_outputs/design_unconditional_4.pdb already exists.
+[2023-03-30 15:40:17,566][__main__][INFO] - Making design example_outputs/design_unconditional_5
+[2023-03-30 15:40:17,566][__main__][INFO] - (cautious mode) Skipping this design because example_outputs/design_unconditional_5.pdb already exists.
+[2023-03-30 15:40:17,566][__main__][INFO] - Making design example_outputs/design_unconditional_6
+[2023-03-30 15:40:17,567][__main__][INFO] - (cautious mode) Skipping this design because example_outputs/design_unconditional_6.pdb already exists.
+[2023-03-30 15:40:17,567][__main__][INFO] - Making design example_outputs/design_unconditional_7
+[2023-03-30 15:40:17,567][__main__][INFO] - (cautious mode) Skipping this design because example_outputs/design_unconditional_7.pdb already exists.
+[2023-03-30 15:40:17,568][__main__][INFO] - Making design example_outputs/design_unconditional_8
+[2023-03-30 15:40:17,568][__main__][INFO] - (cautious mode) Skipping this design because example_outputs/design_unconditional_8.pdb already exists.
+[2023-03-30 15:40:17,568][__main__][INFO] - Making design example_outputs/design_unconditional_9
+[2023-03-30 15:40:17,569][__main__][INFO] - (cautious mode) Skipping this design because example_outputs/design_unconditional_9.pdb already exists.

@@ -1,0 +1,2 @@
+[2023-03-30 15:38:22,154][inference.model_runners][INFO] - Reading checkpoint from /proj/kuhl_lab/RFdiffusion/inference/../models/Base_ckpt.pt
+[2023-03-30 15:38:26,114][inference.model_runners][INFO] - Loading checkpoint.
