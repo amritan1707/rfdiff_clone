@@ -86,7 +86,7 @@ def main(config_path, input_pdb_path, contigs=None, contigs_2=None, provide_seq=
     
     time3 = time.time()
     path_time = time3 - time2
-    print(f"Paths initialized in {path_time:.2f} seconds")
+    #print(f"Paths initialized in {path_time:.2f} seconds")
     
     design_startnum = sampler.inf_conf.design_startnum
     if sampler.inf_conf.design_startnum == -1:
@@ -104,7 +104,7 @@ def main(config_path, input_pdb_path, contigs=None, contigs_2=None, provide_seq=
         
     time4 = time.time()
     pdb_time = time4 - time3
-    print(f"PDBs initialized in {pdb_time:.2f} seconds")
+    #print(f"PDBs initialized in {pdb_time:.2f} seconds")
 
     pdbs, trbs, traj_xts, traj_x0s = [], [], [], []
     for i_des in range(design_startnum, design_startnum + sampler.inf_conf.num_designs):
@@ -132,6 +132,12 @@ def main(config_path, input_pdb_path, contigs=None, contigs_2=None, provide_seq=
         seq_t = torch.clone(seq_init)
         # Loop over number of reverse diffusion time steps.
         for t in range(int(sampler.t_step_input), sampler.inf_conf.final_step - 1, -1):
+            if sampler.contig_conf.contigs_2 is not None:
+                if t == int(sampler.t_step_input_2):
+                    print("at time step " + str(t) + ": combining masks")
+                    sampler.mask_str[0,:] = torch.logical_and(sampler.mask_str.squeeze(), sampler.mask_str_2.squeeze())
+                    sampler.diffusion_mask = sampler.mask_str
+            #   sampler.
             px0, x_t, seq_t, plddt = sampler.sample_step(
                 t=t, x_t=x_t, seq_init=seq_t, final_step=sampler.inf_conf.final_step
             )
@@ -250,7 +256,7 @@ def main(config_path, input_pdb_path, contigs=None, contigs_2=None, provide_seq=
     return pdbs, trbs, traj_xts, traj_x0s
 
 if __name__ == "__main__":
-    config_path = "/work/users/a/m/amritan/partial_diff/testRFdiff/tests/diff_steps/run1/partial.yaml"
-    input_pdb_path = "/work/users/a/m/amritan/partial_diff/testRFdiff/tests/diff_steps/run1/tim_6tu6.pdb"
+    config_path = "./partial.yaml"
+    input_pdb_path = "./8tim.pdb"
     a, b, c, d = main(config_path, input_pdb_path, contigs=None, design_run=False, num_designs=100)
     print(len(a))

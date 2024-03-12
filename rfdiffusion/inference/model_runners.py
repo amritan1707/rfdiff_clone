@@ -451,9 +451,9 @@ class Sampler:
         xT = fa_stack[-1].squeeze()[:,:14,:]
         xt = torch.clone(xT)
         
-        if self.contig_conf.contigs_2 is not None:
-            self.mask_str = torch.logical_and(self.mask_str.squeeze(), self.mask_str_2.squeeze())
-            self.diffusion_mask = self.mask_str
+        #if self.contig_conf.contigs_2 is not None:
+        #    self.mask_str = torch.logical_and(self.mask_str.squeeze(), self.mask_str_2.squeeze())
+        #    self.diffusion_mask = self.mask_str
         
         self.denoiser = self.construct_denoiser(len(self.contig_map.ref), visible=self.mask_seq.squeeze())
 
@@ -472,7 +472,7 @@ class Sampler:
         #########################################
         ### Parse ligand for ligand potential ###
         #########################################
-
+        #TODO: update for multiple masks
         if self.potential_conf.guiding_potentials is not None:
             if any(list(filter(lambda x: "substrate_contacts" in x, self.potential_conf.guiding_potentials))):
                 assert len(self.target_feats['xyz_het']) > 0, "If you're using the Substrate Contact potential, \
@@ -655,40 +655,22 @@ class Sampler:
         pair_prev = None
         state_prev = None
 
-        if self.contig_conf.contigs_2 is not None:
-            with torch.no_grad():
-                msa_prev, pair_prev, px0, state_prev, alpha, logits, plddt = self.model(msa_masked,
-                                    msa_full,
-                                    seq_in,
-                                    xt_in,
-                                    idx_pdb,
-                                    t1d=t1d,
-                                    t2d=t2d,
-                                    xyz_t=xyz_t,
-                                    alpha_t=alpha_t,
-                                    msa_prev = msa_prev,
-                                    pair_prev = pair_prev,
-                                    state_prev = state_prev,
-                                    t=torch.tensor(t),
-                                    return_infer=True,
-                                    motif_mask=self.diffusion_mask.squeeze().to(self.device))
-        else:
-            with torch.no_grad():
-                msa_prev, pair_prev, px0, state_prev, alpha, logits, plddt = self.model(msa_masked,
-                                    msa_full,
-                                    seq_in,
-                                    xt_in,
-                                    idx_pdb,
-                                    t1d=t1d,
-                                    t2d=t2d,
-                                    xyz_t=xyz_t,
-                                    alpha_t=alpha_t,
-                                    msa_prev = msa_prev,
-                                    pair_prev = pair_prev,
-                                    state_prev = state_prev,
-                                    t=torch.tensor(t),
-                                    return_infer=True,
-                                    motif_mask=self.diffusion_mask.squeeze().to(self.device))
+        with torch.no_grad():
+            msa_prev, pair_prev, px0, state_prev, alpha, logits, plddt = self.model(msa_masked,
+                                msa_full,
+                                seq_in,
+                                xt_in,
+                                idx_pdb,
+                                t1d=t1d,
+                                t2d=t2d,
+                                xyz_t=xyz_t,
+                                alpha_t=alpha_t,
+                                msa_prev = msa_prev,
+                                pair_prev = pair_prev,
+                                state_prev = state_prev,
+                                t=torch.tensor(t),
+                                return_infer=True,
+                                motif_mask=self.diffusion_mask.squeeze().to(self.device))
 
         # prediction of X0 
         _, px0  = self.allatom(torch.argmax(seq_in, dim=-1), px0, alpha)
@@ -697,41 +679,25 @@ class Sampler:
         #####################
         ### Get next pose ###
         #####################
-        
-        if self.contig_conf.contigs_2 is not None:
-            if t > final_step:
-                seq_t_1 = nn.one_hot(seq_init,num_classes=22).to(self.device)
-                x_t_1, px0 = self.denoiser.get_next_pose(
-                    xt=x_t,
-                    px0=px0,
-                    t=t,
-                    diffusion_mask=self.mask_str.squeeze(),
-                    align_motif=self.inf_conf.align_motif
-            )
-            else:
-                x_t_1 = torch.clone(px0).to(x_t.device)
-                seq_t_1 = torch.clone(seq_init)
-                px0 = px0.to(x_t.device)
+
+        if t > final_step:
+            seq_t_1 = nn.one_hot(seq_init,num_classes=22).to(self.device)
+            x_t_1, px0 = self.denoiser.get_next_pose(
+                xt=x_t,
+                px0=px0,
+                t=t,
+                diffusion_mask=self.mask_str.squeeze(),
+                align_motif=self.inf_conf.align_motif
+        )
         else:
-            if t > final_step:
-                seq_t_1 = nn.one_hot(seq_init,num_classes=22).to(self.device)
-                x_t_1, px0 = self.denoiser.get_next_pose(
-                    xt=x_t,
-                    px0=px0,
-                    t=t,
-                    diffusion_mask=self.mask_str.squeeze(),
-                    align_motif=self.inf_conf.align_motif
-            )
-            else:
-                x_t_1 = torch.clone(px0).to(x_t.device)
-                seq_t_1 = torch.clone(seq_init)
-                px0 = px0.to(x_t.device)
+            x_t_1 = torch.clone(px0).to(x_t.device)
+            seq_t_1 = torch.clone(seq_init)
+            px0 = px0.to(x_t.device)
 
         if self.symmetry is not None:
             x_t_1, seq_t_1 = self.symmetry.apply_symmetry(x_t_1, seq_t_1)
 
         return px0, x_t_1, seq_t_1, plddt
-
 
 class SelfConditioning(Sampler):
     """

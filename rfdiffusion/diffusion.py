@@ -670,7 +670,7 @@ class Diffuser:
                 diffused_T, deltas = self.eucl_diffuser.diffuse_translations(
                     xyz[:, :3, :].clone(), diffusion_mask=diffusion_mask
                 )
-                print('Time to diffuse coordinates: ',time.time()-tick)
+                #print('Time to diffuse coordinates: ',time.time()-tick)
                 diffused_T /= self.crd_scale
                 deltas /= self.crd_scale
 
@@ -680,7 +680,7 @@ class Diffuser:
                     xyz[:, :3, :].clone(), diffusion_mask=diffusion_mask.numpy(), t_list=None
                 )
                 diffused_frame_crds /= self.crd_scale
-                print('Time to diffuse frames: ',time.time()-tick)
+                #print('Time to diffuse frames: ',time.time()-tick)
 
                 ##### Now combine all the diffused quantities to make full atom diffused poses
                 tick = time.time()
